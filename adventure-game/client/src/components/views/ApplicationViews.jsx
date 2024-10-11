@@ -5,12 +5,13 @@ import Home from '../Home.jsx';
 import Register from '../Register.jsx';
 import CharacterForm from '../Characters/CharacterForm.jsx';
 import CharacterSelector from '../Characters/CharacterSelector.jsx';
+import Inventory from '../Inventory.jsx';
 
 export default function ApplicationViews({ isLoggedIn, setIsLoggedIn }) {
   const userProfile = localStorage.getItem('userProfile') ? JSON.parse(localStorage.getItem('userProfile')) : null;
   const userId = userProfile?.id;
 
-  console.log('User ID in ApplicationViews:', userId); // Ensure it's logged
+  
 
   return (
     <Routes>
@@ -18,8 +19,9 @@ export default function ApplicationViews({ isLoggedIn, setIsLoggedIn }) {
         <>
           <Route path="/" element={<Home />} />
           <Route path="/create-character" element={<CharacterForm />} />
-          {/* Passing the userId directly as a prop */}
+          
           <Route path="/select-character" element={<CharacterSelector userId={userId} />} />
+          <Route path="/inventory" element={<Inventory />} />
         </>
       ) : (
         <>

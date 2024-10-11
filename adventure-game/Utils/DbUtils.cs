@@ -92,13 +92,18 @@ namespace adventure_game.Utils
                 return reader.IsDBNull(reader.GetOrdinal(column));
             }
 
-            /// <summary>
-            ///  Determine if the value a given column is not NULL
-            /// </summary>
-            /// <param name="reader">A SqlDataReader that has not exhausted it's result set.</param>
-            /// <param name="column">The name of the column from the result set refereed to by the reader.</param>
-            /// <returns>true if "column" is not NULL in the database otherwise false.</returns>
-            public static bool IsNotDbNull(SqlDataReader reader, string column)
+        public static bool GetBoolean(SqlDataReader reader, string column)
+        {
+            return reader.GetBoolean(reader.GetOrdinal(column));
+        }
+
+        /// <summary>
+        ///  Determine if the value a given column is not NULL
+        /// </summary>
+        /// <param name="reader">A SqlDataReader that has not exhausted it's result set.</param>
+        /// <param name="column">The name of the column from the result set refereed to by the reader.</param>
+        /// <returns>true if "column" is not NULL in the database otherwise false.</returns>
+        public static bool IsNotDbNull(SqlDataReader reader, string column)
             {
                 return !IsDbNull(reader, column);
             }
