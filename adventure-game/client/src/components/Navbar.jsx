@@ -17,6 +17,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                     <>
                         <li><button onClick={handleLogout}>Logout</button></li>
                         <li><Link to="/create-character">Create Character</Link></li>
+                        <li><Link to="/select-character">Select Character</Link></li>
                     </>
                 ) : (
                     <>
