@@ -11,7 +11,7 @@ namespace adventure_game.Repositories
         public InventoryRepository(IConfiguration configuration) : base(configuration) { }
 
         // Add an item to character inventory
-        public void AddItemToInventory(int characterId, int itemId)
+        public bool AddItemToInventory(int characterId, int itemId)
         {
             using (var conn = Connection)
             {
@@ -25,7 +25,7 @@ namespace adventure_game.Repositories
                     cmd.Parameters.AddWithValue("@characterId", characterId);
                     cmd.Parameters.AddWithValue("@itemId", itemId);
 
-                    cmd.ExecuteNonQuery();
+                    return cmd.ExecuteNonQuery() > 0; // Return true if the insert was successful
                 }
             }
         }

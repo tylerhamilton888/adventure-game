@@ -5,7 +5,7 @@ namespace adventure_game.Repositories
 {
     public interface IInventoryRepository
     {
-        bool AddItemToInventory(int characterId, int itemId); 
+        bool AddItemToInventory(int characterId, int itemId); // Change return type to bool
         bool EquipItem(int characterId, int itemId);
         bool UnequipItem(int characterId, int itemId);
         bool RemoveItemFromInventory(int characterId, int itemId);

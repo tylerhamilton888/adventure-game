@@ -1,6 +1,7 @@
 ﻿using adventure_game.Models;
 using adventure_game.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace adventure_game.Controllers
 {
@@ -15,73 +16,38 @@ namespace adventure_game.Controllers
             _inventoryRepository = inventoryRepository;
         }
 
-        // POST: api/inventory/add
-        [HttpPost("add")]
-        public IActionResult AddItemToInventory(AddItemRequest request)
+        // GET: api/inventory/character/{characterId}
+        [HttpGet("character/{characterId}")]
+        public IActionResult GetInventoryByCharacterId(int characterId)
         {
-            _inventoryRepository.AddItemToInventory(request.CharacterId, request.ItemId);
-            return Ok("Item added successfully.");
+            var inventory = _inventoryRepository.GetInventoryByCharacterId(characterId);
+            if (inventory == null || inventory.Count == 0)
+            {
+                return NotFound(new { message = "No inventory found for the character." });
+            }
+            return Ok(inventory);
         }
 
         // POST: api/inventory/equip
         [HttpPost("equip")]
-        public IActionResult EquipItem(EquipRequest request)
+        public IActionResult EquipItem([FromBody] EquipItemRequest request)
         {
-            var success = _inventoryRepository.EquipItem(request.CharacterId, request.ItemId);
-            if (success)
+            if (request.CharacterId <= 0 || request.ItemId <= 0)
             {
-                return Ok("Item equipped successfully.");
+                return BadRequest("Character ID and Item ID must be provided.");
             }
-            else
-            {
-                return StatusCode(500, "Failed to equip item.");
-            }
-        }
 
-        // POST: api/inventory/unequip
-        [HttpPost("unequip")]
-        public IActionResult UnequipItem(EquipRequest request)
-        {
-            var success = _inventoryRepository.UnequipItem(request.CharacterId, request.ItemId);
-            if (success)
+            bool equipped = _inventoryRepository.EquipItem(request.CharacterId, request.ItemId);
+            if (equipped)
             {
-                return Ok("Item unequipped successfully.");
+                return Ok(new { success = true, message = "Item equipped successfully." });
             }
-            else
-            {
-                return StatusCode(500, "Failed to unequip item.");
-            }
-        }
-
-        // DELETE: api/inventory/remove
-        [HttpDelete("remove")]
-        public IActionResult RemoveItemFromInventory(RemoveItemRequest request)
-        {
-            var success = _inventoryRepository.RemoveItemFromInventory(request.CharacterId, request.ItemId);
-            if (success)
-            {
-                return Ok("Item removed successfully.");
-            }
-            else
-            {
-                return StatusCode(500, "Failed to remove item from inventory.");
-            }
+            return BadRequest(new { success = false, message = "Failed to equip item." });
         }
     }
 
-    public class AddItemRequest
-    {
-        public int CharacterId { get; set; }
-        public int ItemId { get; set; }
-    }
-
-    public class EquipRequest
-    {
-        public int CharacterId { get; set; }
-        public int ItemId { get; set; }
-    }
-
-    public class RemoveItemRequest
+    // Request DTO for equipping items
+    public class EquipItemRequest
     {
         public int CharacterId { get; set; }
         public int ItemId { get; set; }
