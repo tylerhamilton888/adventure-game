@@ -55,3 +55,24 @@ export const unequipItem = (characterId, itemId) => {
       return { success: false, message: "Failed to unequip item" };
     });
 };
+
+// Add an item to a character's inventory
+export const addItemToInventory = (characterId, itemId) => {
+  return fetch(`${apiUrl}/api/inventory/add`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ characterId, itemId }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((data) => ({ success: false, message: data.message }));
+      }
+      return { success: true, message: "Item added successfully" };
+    })
+    .catch((error) => {
+      console.error("Error adding item to inventory:", error);
+      return { success: false, message: "Failed to add item to inventory" };
+    });
+};

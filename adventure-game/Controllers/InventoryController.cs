@@ -1,7 +1,7 @@
 ﻿using adventure_game.Models;
 using adventure_game.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using adventure_game.Models;
 
 namespace adventure_game.Controllers
 {
@@ -18,36 +18,59 @@ namespace adventure_game.Controllers
 
         // GET: api/inventory/character/{characterId}
         [HttpGet("character/{characterId}")]
-        public IActionResult GetInventoryByCharacterId(int characterId)
+        public IActionResult GetInventoryForCharacter(int characterId)
         {
-            var inventory = _inventoryRepository.GetInventoryByCharacterId(characterId);
-            if (inventory == null || inventory.Count == 0)
+            var inventoryItems = _inventoryRepository.GetInventoryByCharacterId(characterId);
+            if (inventoryItems == null || inventoryItems.Count == 0)
             {
-                return NotFound(new { message = "No inventory found for the character." });
+                return NotFound();
             }
-            return Ok(inventory);
+            return Ok(inventoryItems);
         }
 
         // POST: api/inventory/equip
         [HttpPost("equip")]
-        public IActionResult EquipItem([FromBody] EquipItemRequest request)
+        public IActionResult EquipItem([FromBody] EquipRequest request)
         {
-            if (request.CharacterId <= 0 || request.ItemId <= 0)
+            var result = _inventoryRepository.EquipItem(request.CharacterId, request.ItemId);
+            if (result)
             {
-                return BadRequest("Character ID and Item ID must be provided.");
+                return Ok(new { success = true, message = $"You have equipped {request.ItemId}." });
             }
+            else
+            {
+                return BadRequest(new { success = false, message = "You already have both hands full!" });
+            }
+        }
 
-            bool equipped = _inventoryRepository.EquipItem(request.CharacterId, request.ItemId);
-            if (equipped)
+        // POST: api/inventory/unequip
+        [HttpPost("unequip")]
+        public IActionResult UnequipItem([FromBody] EquipRequest request)
+        {
+            var result = _inventoryRepository.UnequipItem(request.CharacterId, request.ItemId);
+
+            if (result)
             {
-                return Ok(new { success = true, message = "Item equipped successfully." });
+                return Ok(new { success = true, message = $"You have unequipped {request.ItemId}." });
             }
-            return BadRequest(new { success = false, message = "Failed to equip item." });
+            return BadRequest(new { success = false, message = "Failed to unequip item." });
+        }
+
+        // POST: api/inventory/add
+        [HttpPost("add")]
+        public IActionResult AddItemToInventory([FromBody] EquipRequest request)
+        {
+            var result = _inventoryRepository.AddItemToInventory(request.CharacterId, request.ItemId);
+            if (result)
+            {
+                return Ok(new { success = true, message = $"Item {request.ItemId} added to inventory." });
+            }
+            return BadRequest(new { success = false, message = "Failed to add item to inventory." });
         }
     }
 
-    // Request DTO for equipping items
-    public class EquipItemRequest
+    // Simple DTO for the equip/unequip request body
+    public class EquipRequest
     {
         public int CharacterId { get; set; }
         public int ItemId { get; set; }
