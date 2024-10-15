@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int Type { get; set; } // Weapon, Shield, Armor
+        public int Type { get; set; } 
         public int StrengthModifier { get; set; }
         public int DexterityModifier { get; set; }
         public int CharismaModifier { get; set; }

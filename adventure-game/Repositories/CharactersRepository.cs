@@ -122,18 +122,34 @@ namespace adventure_game.Repositories
                     cmd.Parameters.AddWithValue("@Name", character.Name);
                     cmd.Parameters.AddWithValue("@ClassId", character.ClassId);
                     cmd.Parameters.AddWithValue("@OriginId", character.OriginId);
-                    cmd.Parameters.AddWithValue("@Health", character.Health);
-                    cmd.Parameters.AddWithValue("@Strength", character.Strength);
-                    cmd.Parameters.AddWithValue("@Dexterity", character.Dexterity);
-                    cmd.Parameters.AddWithValue("@Charisma", character.Charisma);
-                    cmd.Parameters.AddWithValue("@WeaponSkill", character.WeaponSkill);
-                    cmd.Parameters.AddWithValue("@Toughness", character.Toughness);
-                    cmd.Parameters.AddWithValue("@Money", character.Money);
+                    cmd.Parameters.AddWithValue("@Health", character.Health <= 0 ? 20 : character.Health);
+                    cmd.Parameters.AddWithValue("@Strength", character.Strength <= 0 ? 5 : character.Strength);
+                    cmd.Parameters.AddWithValue("@Dexterity", character.Dexterity <= 0 ? 5 : character.Dexterity);
+                    cmd.Parameters.AddWithValue("@Charisma", character.Charisma <= 0 ? 5 : character.Charisma);
+                    cmd.Parameters.AddWithValue("@WeaponSkill", character.WeaponSkill <= 0 ? 5 : character.WeaponSkill);
+                    cmd.Parameters.AddWithValue("@Toughness", character.Toughness <= 0 ? 5 : character.Toughness);
+                    cmd.Parameters.AddWithValue("@Money", character.Money <= 0 ? 5 : character.Money);
                     cmd.Parameters.AddWithValue("@IsDefault", character.IsDefault);
 
                     cmd.ExecuteNonQuery();
 
                     character.Id = newId;
+
+                    // Manually generate ID for inventory item
+                    cmd.CommandText = @"SELECT ISNULL(MAX(Id), 0) + 1 FROM InventoryItems";
+                    int inventoryItemId = (int)cmd.ExecuteScalar();
+
+                    // Insert basic leather armor into character inventory
+                    cmd.CommandText = @"
+                        INSERT INTO InventoryItems (Id, characterId, itemId, equipped)
+                        VALUES (@inventoryItemId, @characterId, @itemId, 0)";
+
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@inventoryItemId", inventoryItemId);
+                    cmd.Parameters.AddWithValue("@characterId", character.Id);
+                    cmd.Parameters.AddWithValue("@itemId", 3); // Assuming item ID 3 is the basic leather armor
+
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

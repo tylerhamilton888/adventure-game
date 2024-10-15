@@ -28,7 +28,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                         {/* Show Inventory link if a character is selected */}
                         {hasCharacter && <li><Link to="/inventory">Inventory</Link></li>}
                         <li><Link to="/my-character">My Character</Link></li>
-                        
+                        <li><Link to="/level-selection">New Adventure</Link></li>
                     </>
                 ) : (
                     <>
