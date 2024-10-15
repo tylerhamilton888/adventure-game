@@ -35,13 +35,13 @@ namespace adventure_game.Controllers
         [HttpPost]
         public IActionResult AddCharacter(Character character)
         {
-            if (character.UserId == null || character.UserId <= 0)
+            if (character.UserId <= 0)
             {
                 return BadRequest("User ID is required to create a character.");
             }
 
             _charactersRepository.AddCharacter(character);
-            return CreatedAtAction(nameof(GetCharactersByUserId), new { userId = character.UserId }, character);
+            return CreatedAtAction(nameof(GetCharacterById), new { characterId = character.Id }, character);
         }
 
         // GET: api/characters/user/{userId}/all
@@ -50,6 +50,20 @@ namespace adventure_game.Controllers
         {
             var characters = _charactersRepository.GetAllCharactersForUser(userId);
             return Ok(characters);
+        }
+
+        // GET: api/characters/{characterId}
+        [HttpGet("{characterId}")]
+        public IActionResult GetCharacterById(int characterId)
+        {
+            var character = _charactersRepository.GetCharacterById(characterId);
+
+            if (character == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(character);
         }
     }
 }

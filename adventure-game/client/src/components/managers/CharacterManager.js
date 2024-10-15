@@ -55,3 +55,15 @@ export const getCharactersByUserId = (userId) => {
   return fetch(`${apiUrl}/api/characters/user/${userId}`)
     .then((res) => res.json());
 };
+
+// Get details of a specific character
+export const getCharacterDetails = (characterId) => {
+  return fetch(`${apiUrl}/api/characters/${characterId}`)
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`Error fetching character: ${res.status}`);
+      }
+      return res.json();
+    })
+    .catch(err => console.error("Failed to fetch character:", err));
+};

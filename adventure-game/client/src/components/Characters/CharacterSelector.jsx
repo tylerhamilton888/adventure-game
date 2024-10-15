@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getGenericCharacters, getCharactersByUserId } from '../managers/CharacterManager';
 
 export default function CharacterSelector({ userId }) {
-  const [characters, setCharacters] = useState([]); // Initialize as empty array
+  const [characters, setCharacters] = useState([]); 
   const [selectedCharacter, setSelectedCharacter] = useState(null);
 
   // Fetch both generic and user-specific characters

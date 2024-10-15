@@ -9,5 +9,6 @@ namespace adventure_game.Repositories
         List<Character> GetCharactersByUserId(int userId);
         void AddCharacter(Character character);
         List<Character> GetAllCharactersForUser(int userId);
+        Character GetCharacterById(int characterId);
     }
 }

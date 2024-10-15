@@ -6,6 +6,7 @@ import Register from '../Register.jsx';
 import CharacterForm from '../Characters/CharacterForm.jsx';
 import CharacterSelector from '../Characters/CharacterSelector.jsx';
 import Inventory from '../Inventory.jsx';
+import MyCharacter from '../MyCharacter.jsx';
 
 export default function ApplicationViews({ isLoggedIn, setIsLoggedIn }) {
   const userProfile = localStorage.getItem('userProfile') ? JSON.parse(localStorage.getItem('userProfile')) : null;
@@ -22,6 +23,7 @@ export default function ApplicationViews({ isLoggedIn, setIsLoggedIn }) {
           
           <Route path="/select-character" element={<CharacterSelector userId={userId} />} />
           <Route path="/inventory" element={<Inventory />} />
+          <Route path="/my-character" element={<MyCharacter />} />
         </>
       ) : (
         <>
