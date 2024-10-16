@@ -26,8 +26,8 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                         <li><Link to="/create-character">Create Character</Link></li>
                         <li><Link to="/select-character">Select Character</Link></li>
                         {/* Show Inventory link if a character is selected */}
-                        {hasCharacter && <li><Link to="/inventory">Inventory</Link></li>}
-                        <li><Link to="/my-character">My Character</Link></li>
+                        {/* {hasCharacter && <li><Link to="/inventory">Inventory</Link></li>} */}
+                        {/* <li><Link to="/my-character">My Character</Link></li> */}
                         <li><Link to="/level-selection">New Adventure</Link></li>
                         <li><Link to="/combat-explanation">Combat Explanation</Link></li>
                     </>

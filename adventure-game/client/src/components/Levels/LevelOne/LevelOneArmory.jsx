@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addItemToInventory } from '../../managers/InventoryManager';
+import IntegratedNavigation from '../../IntegratedNavigation';
 
 export default function LevelOneArmory() {
   const navigate = useNavigate();
@@ -53,6 +54,8 @@ export default function LevelOneArmory() {
       {itemsCollected.sword && itemsCollected.shield && (
         <button onClick={handleProceed}>Proceed to the Crossroads</button>
       )}
+
+<IntegratedNavigation currentPath={window.location.pathname} />
     </div>
   );
 }
