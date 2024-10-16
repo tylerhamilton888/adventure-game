@@ -1,7 +1,6 @@
 ﻿using adventure_game.Models;
 using adventure_game.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using adventure_game.Models;
 
 namespace adventure_game.Controllers
 {
@@ -66,6 +65,20 @@ namespace adventure_game.Controllers
                 return Ok(new { success = true, message = $"Item {request.ItemId} added to inventory." });
             }
             return BadRequest(new { success = false, message = "Failed to add item to inventory." });
+        }
+
+        // DELETE: api/inventory/{characterId}/item/{itemId}
+        [HttpDelete("{characterId}/item/{itemId}")]
+        public IActionResult DeleteItemFromInventory(int characterId, int itemId)
+        {
+            var itemExists = _inventoryRepository.GetInventoryItem(characterId, itemId);
+            if (itemExists == null)
+            {
+                return NotFound(new { message = "Item not found in inventory" });
+            }
+
+            _inventoryRepository.DeleteInventoryItem(characterId, itemId);
+            return Ok(new { message = "Item deleted successfully" });
         }
     }
 

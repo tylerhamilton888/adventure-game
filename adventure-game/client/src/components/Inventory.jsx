@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getInventoryForCharacter, equipItem, unequipItem } from './managers/InventoryManager';
+import { getInventoryForCharacter, equipItem, unequipItem, deleteItem } from './managers/InventoryManager';
 import IntegratedNavigation from '../components/IntegratedNavigation';
 
 export default function Inventory() {
@@ -57,6 +57,22 @@ export default function Inventory() {
     }
   };
 
+  const handleDelete = async (item) => {
+    if (window.confirm('Warning, you cannot undo this')) {
+      try {
+        const response = await deleteItem(selectedCharacter.id, item.id);
+        if (response.success) {
+          setNotificationMessage(`Item ${item.name} deleted from inventory.`);
+          updateInventory();
+        } else {
+          setNotificationMessage('Failed to delete item from inventory.');
+        }
+      } catch (error) {
+        console.error('Failed to delete item:', error);
+      }
+    }
+  };
+
   if (!selectedCharacter) {
     return <div>Please select a character first.</div>;
   }
@@ -80,6 +96,7 @@ export default function Inventory() {
             ) : (
               <button onClick={() => handleEquip(item)}>Equip</button>
             )}
+            <button onClick={() => handleDelete(item)}>Delete</button>
           </li>
         ))}
       </ul>

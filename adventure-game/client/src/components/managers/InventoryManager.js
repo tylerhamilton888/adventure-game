@@ -37,7 +37,7 @@ export const equipItem = (characterId, itemId) => {
 
 // Unequip an item for a character
 export const unequipItem = (characterId, itemId) => {
-  return fetch(${apiUrl}/api/inventory/unequip, {
+  return fetch(`${apiUrl}/api/inventory/unequip`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export const unequipItem = (characterId, itemId) => {
 
 // Add an item to a character's inventory
 export const addItemToInventory = (characterId, itemId) => {
-  return fetch(${apiUrl}/api/inventory/add, {
+  return fetch(`${apiUrl}/api/inventory/add`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -74,5 +74,24 @@ export const addItemToInventory = (characterId, itemId) => {
     .catch((error) => {
       console.error("Error adding item to inventory:", error);
       return { success: false, message: "Failed to add item to inventory" };
+    });
+};
+
+export const deleteItem = (characterId, itemId) => {
+  return fetch(`${apiUrl}/api/inventory/${characterId}/item/${itemId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((data) => ({ success: false, message: data.message }));
+      }
+      return { success: true, message: "Item deleted successfully" };
+    })
+    .catch((error) => {
+      console.error("Error deleting item from inventory:", error);
+      return { success: false, message: "Failed to delete item from inventory" };
     });
 };
