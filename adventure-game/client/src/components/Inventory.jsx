@@ -31,7 +31,7 @@ export default function Inventory() {
 
   const handleEquip = async (item) => {
     try {
-      const response = await equipItem(selectedCharacter.id, item.id);
+      const response = await equipItem(item.id); // Updated to use only inventoryItemId
       if (response.success) {
         setNotificationMessage(`You have equipped ${item.name}`);
         updateInventory();
@@ -45,7 +45,7 @@ export default function Inventory() {
 
   const handleUnequip = async (item) => {
     try {
-      const response = await unequipItem(selectedCharacter.id, item.id);
+      const response = await unequipItem(item.id); // Updated to use only inventoryItemId
       if (response.success) {
         setNotificationMessage(`You have unequipped ${item.name}`);
         updateInventory();
@@ -60,7 +60,7 @@ export default function Inventory() {
   const handleDelete = async (item) => {
     if (window.confirm('Warning, you cannot undo this')) {
       try {
-        const response = await deleteItem(selectedCharacter.id, item.id);
+        const response = await deleteItem(item.id); // Updated to use only inventoryItemId
         if (response.success) {
           setNotificationMessage(`Item ${item.name} deleted from inventory.`);
           updateInventory();

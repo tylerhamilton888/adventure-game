@@ -15,13 +15,13 @@ export const getInventoryForCharacter = (characterId) => {
 };
 
 // Equip an item for a character
-export const equipItem = (characterId, itemId) => {
+export const equipItem = (inventoryItemId) => {
   return fetch(`${apiUrl}/api/inventory/equip`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ characterId, itemId }),
+    body: JSON.stringify({ inventoryItemId }),
   })
     .then((response) => {
       if (!response.ok) {
@@ -36,13 +36,13 @@ export const equipItem = (characterId, itemId) => {
 };
 
 // Unequip an item for a character
-export const unequipItem = (characterId, itemId) => {
+export const unequipItem = (inventoryItemId) => {
   return fetch(`${apiUrl}/api/inventory/unequip`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ characterId, itemId }),
+    body: JSON.stringify({ inventoryItemId }),
   })
     .then((response) => {
       if (!response.ok) {
@@ -77,21 +77,19 @@ export const addItemToInventory = (characterId, itemId) => {
     });
 };
 
-export const deleteItem = (characterId, itemId) => {
-  return fetch(`${apiUrl}/api/inventory/${characterId}/item/${itemId}`, {
+// Delete an item from a character's inventory
+export const deleteItem = (inventoryItemId) => {
+  return fetch(`${apiUrl}/api/inventory/${inventoryItemId}`, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
   })
     .then((response) => {
       if (!response.ok) {
-        return response.json().then((data) => ({ success: false, message: data.message }));
+        return { success: false };
       }
-      return { success: true, message: "Item deleted successfully" };
+      return { success: true };
     })
     .catch((error) => {
-      console.error("Error deleting item from inventory:", error);
-      return { success: false, message: "Failed to delete item from inventory" };
+      console.error("Error deleting item:", error);
+      return { success: false, message: "Failed to delete item" };
     });
 };

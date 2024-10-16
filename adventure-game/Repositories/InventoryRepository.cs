@@ -8,7 +8,7 @@ namespace adventure_game.Repositories
     {
         public InventoryRepository(IConfiguration configuration) : base(configuration) { }
 
-        public InventoryItem GetInventoryItem(int characterId, int itemId)
+        public InventoryItem GetInventoryItem(int inventoryItemId)
         {
             using (var conn = Connection)
             {
@@ -21,9 +21,8 @@ namespace adventure_game.Repositories
                         FROM InventoryItems ii
                         JOIN Items i ON ii.itemId = i.id
                         JOIN ItemType it ON i.type = it.id
-                        WHERE ii.characterId = @characterId AND ii.itemId = @itemId";
-                    cmd.Parameters.AddWithValue("@characterId", characterId);
-                    cmd.Parameters.AddWithValue("@itemId", itemId);
+                        WHERE ii.id = @inventoryItemId";
+                    cmd.Parameters.AddWithValue("@inventoryItemId", inventoryItemId);
 
                     var reader = cmd.ExecuteReader();
                     if (reader.Read())
@@ -48,16 +47,15 @@ namespace adventure_game.Repositories
             }
         }
 
-        public void DeleteInventoryItem(int characterId, int itemId)
+        public void DeleteInventoryItem(int inventoryItemId)
         {
             using (var conn = Connection)
             {
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "DELETE FROM InventoryItems WHERE characterId = @characterId AND itemId = @itemId";
-                    cmd.Parameters.AddWithValue("@characterId", characterId);
-                    cmd.Parameters.AddWithValue("@itemId", itemId);
+                    cmd.CommandText = "DELETE FROM InventoryItems WHERE id = @inventoryItemId";
+                    cmd.Parameters.AddWithValue("@inventoryItemId", inventoryItemId);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -72,7 +70,7 @@ namespace adventure_game.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT i.id, i.name, it.typeName, i.strengthModifier, i.dexterityModifier, i.charismaModifier,
+                        SELECT ii.id, i.name, it.typeName, i.strengthModifier, i.dexterityModifier, i.charismaModifier,
                                i.toughnessModifier, i.equippable, i.isTwoHanded, ii.equipped
                         FROM InventoryItems ii
                         JOIN Items i ON ii.itemId = i.id
@@ -105,16 +103,76 @@ namespace adventure_game.Repositories
             }
         }
 
-        public bool EquipItem(int characterId, int itemId)
+        public bool EquipItem(int inventoryItemId)
         {
-            // Implementation for equipping an item
-            return true;
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    // Get the item to be equipped and check if it's one-handed or two-handed
+                    cmd.CommandText = @"
+                SELECT i.isTwoHanded, ii.characterId
+                FROM InventoryItems ii
+                JOIN Items i ON ii.itemId = i.id
+                WHERE ii.id = @inventoryItemId";
+
+                    cmd.Parameters.AddWithValue("@inventoryItemId", inventoryItemId);
+                    var reader = cmd.ExecuteReader();
+
+                    bool isTwoHanded = false;
+                    int characterId = 0;
+
+                    if (reader.Read())
+                    {
+                        isTwoHanded = reader.GetBoolean(reader.GetOrdinal("isTwoHanded"));
+                        characterId = reader.GetInt32(reader.GetOrdinal("characterId"));
+                    }
+                    reader.Close();
+
+                    // Check how many hands are currently occupied
+                    cmd.CommandText = @"
+                SELECT ISNULL(SUM(CASE WHEN i.isTwoHanded = 1 THEN 2 ELSE 1 END), 0) as handCount
+                FROM InventoryItems ii
+                JOIN Items i ON ii.itemId = i.id
+                WHERE ii.characterId = @characterId AND ii.equipped = 1";
+
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@characterId", characterId);
+                    int handCount = (int)cmd.ExecuteScalar();
+
+                    // Prevent equipping if hands are full
+                    if (handCount >= 2 || (isTwoHanded && handCount > 0))
+                    {
+                        return false; // Cannot equip this item
+                    }
+
+                    // Equip the item
+                    cmd.CommandText = @"
+                UPDATE InventoryItems
+                SET equipped = 1
+                WHERE id = @inventoryItemId";
+
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@inventoryItemId", inventoryItemId);
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
         }
 
-        public bool UnequipItem(int characterId, int itemId)
+        public bool UnequipItem(int inventoryItemId)
         {
-            // Implementation for unequipping an item
-            return true;
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "UPDATE InventoryItems SET equipped = 0 WHERE id = @inventoryItemId";
+                    cmd.Parameters.AddWithValue("@inventoryItemId", inventoryItemId);
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
         }
 
         public bool AddItemToInventory(int characterId, int itemId)

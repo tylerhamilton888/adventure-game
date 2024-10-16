@@ -29,12 +29,12 @@ namespace adventure_game.Controllers
 
         // POST: api/inventory/equip
         [HttpPost("equip")]
-        public IActionResult EquipItem([FromBody] EquipRequest request)
+        public IActionResult EquipItem([FromBody] InventoryItemRequest request)
         {
-            var result = _inventoryRepository.EquipItem(request.CharacterId, request.ItemId);
+            var result = _inventoryRepository.EquipItem(request.InventoryItemId);
             if (result)
             {
-                return Ok(new { success = true, message = $"You have equipped {request.ItemId}." });
+                return Ok(new { success = true, message = "Item equipped successfully." });
             }
             else
             {
@@ -44,13 +44,13 @@ namespace adventure_game.Controllers
 
         // POST: api/inventory/unequip
         [HttpPost("unequip")]
-        public IActionResult UnequipItem([FromBody] EquipRequest request)
+        public IActionResult UnequipItem([FromBody] InventoryItemRequest request)
         {
-            var result = _inventoryRepository.UnequipItem(request.CharacterId, request.ItemId);
+            var result = _inventoryRepository.UnequipItem(request.InventoryItemId);
 
             if (result)
             {
-                return Ok(new { success = true, message = $"You have unequipped {request.ItemId}." });
+                return Ok(new { success = true, message = "Item unequipped successfully." });
             }
             return BadRequest(new { success = false, message = "Failed to unequip item." });
         }
@@ -67,17 +67,17 @@ namespace adventure_game.Controllers
             return BadRequest(new { success = false, message = "Failed to add item to inventory." });
         }
 
-        // DELETE: api/inventory/{characterId}/item/{itemId}
-        [HttpDelete("{characterId}/item/{itemId}")]
-        public IActionResult DeleteItemFromInventory(int characterId, int itemId)
+        // DELETE: api/inventory/{inventoryItemId}
+        [HttpDelete("{inventoryItemId}")]
+        public IActionResult DeleteItemFromInventory(int inventoryItemId)
         {
-            var itemExists = _inventoryRepository.GetInventoryItem(characterId, itemId);
+            var itemExists = _inventoryRepository.GetInventoryItem(inventoryItemId);
             if (itemExists == null)
             {
                 return NotFound(new { message = "Item not found in inventory" });
             }
 
-            _inventoryRepository.DeleteInventoryItem(characterId, itemId);
+            _inventoryRepository.DeleteInventoryItem(inventoryItemId);
             return Ok(new { message = "Item deleted successfully" });
         }
     }
@@ -87,5 +87,11 @@ namespace adventure_game.Controllers
     {
         public int CharacterId { get; set; }
         public int ItemId { get; set; }
+    }
+
+    // DTO for inventory item operations
+    public class InventoryItemRequest
+    {
+        public int InventoryItemId { get; set; }
     }
 }
