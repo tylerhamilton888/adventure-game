@@ -2,7 +2,7 @@ const apiUrl = "https://localhost:7201";
 
 // Fetch inventory for a character
 export const getInventoryForCharacter = (characterId) => {
-  return fetch(`${apiUrl}/api/inventory/character/${characterId}`)
+  return fetch(${apiUrl}/api/inventory/character/${characterId})
     .then((response) => {
       if (!response.ok) {
         throw new Error("Failed to fetch inventory");
@@ -16,7 +16,7 @@ export const getInventoryForCharacter = (characterId) => {
 
 // Equip an item for a character
 export const equipItem = (characterId, itemId) => {
-  return fetch(`${apiUrl}/api/inventory/equip`, {
+  return fetch(${apiUrl}/api/inventory/equip, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -37,7 +37,7 @@ export const equipItem = (characterId, itemId) => {
 
 // Unequip an item for a character
 export const unequipItem = (characterId, itemId) => {
-  return fetch(`${apiUrl}/api/inventory/unequip`, {
+  return fetch(${apiUrl}/api/inventory/unequip, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export const unequipItem = (characterId, itemId) => {
 
 // Add an item to a character's inventory
 export const addItemToInventory = (characterId, itemId) => {
-  return fetch(`${apiUrl}/api/inventory/add`, {
+  return fetch(${apiUrl}/api/inventory/add, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
