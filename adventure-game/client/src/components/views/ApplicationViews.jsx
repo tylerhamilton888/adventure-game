@@ -13,6 +13,7 @@ import LevelOneEnemyEncounter from '../Levels/LevelOne/LevelOneEnemyEncounter.js
 import LevelOneCrossroads from '../Levels/LevelOne/LevelOneCrossroads.jsx';
 import LevelSelection from '../LevelSelection.jsx';
 import CombatExplanation from '../CombatExplanation.jsx';
+import MySavedGames from '../MySavedGames.jsx';
 
 export default function ApplicationViews({ isLoggedIn, setIsLoggedIn }) {
   const userProfile = localStorage.getItem('userProfile') ? JSON.parse(localStorage.getItem('userProfile')) : null;
@@ -28,6 +29,7 @@ export default function ApplicationViews({ isLoggedIn, setIsLoggedIn }) {
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/my-character" element={<MyCharacter />} />
           <Route path="/combat-explanation" element={<CombatExplanation />} />
+          <Route path="/saved-games" element={<MySavedGames userId={userId} />} />
           
           {/* Level One Routes */}
           <Route path="/level-one/intro" element={<LevelOneIntro />} />

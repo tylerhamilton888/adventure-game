@@ -27,6 +27,7 @@ namespace adventure_game
             builder.Services.AddScoped<IClassRepository, ClassRepository>();
             builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
             builder.Services.AddScoped<IItemsRepository, ItemsRepository>();
+            builder.Services.AddScoped<ISaveGameRepository, SaveGameRepository>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
