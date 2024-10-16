@@ -2,7 +2,7 @@ const apiUrl = "https://localhost:7201";
 
 // Fetch inventory for a character
 export const getInventoryForCharacter = (characterId) => {
-  return fetch(${apiUrl}/api/inventory/character/${characterId})
+  return fetch(`${apiUrl}/api/inventory/character/${characterId}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Failed to fetch inventory");
@@ -16,7 +16,7 @@ export const getInventoryForCharacter = (characterId) => {
 
 // Equip an item for a character
 export const equipItem = (characterId, itemId) => {
-  return fetch(${apiUrl}/api/inventory/equip, {
+  return fetch(`${apiUrl}/api/inventory/equip`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
