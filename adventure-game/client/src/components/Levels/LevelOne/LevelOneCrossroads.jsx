@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import IntegratedNavigation from '../../IntegratedNavigation.jsx';
 
 export default function LevelOneCrossroads() {
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ export default function LevelOneCrossroads() {
       </p>
       <button onClick={() => handleChoosePath('forest')}>Take the Left Path - The Dark Forest</button>
       <button onClick={() => handleChoosePath('clearing')}>Take the Right Path - The Rocky Clearing</button>
+
+      <IntegratedNavigation currentPath={window.location.pathname} />
     </div>
   );
 }

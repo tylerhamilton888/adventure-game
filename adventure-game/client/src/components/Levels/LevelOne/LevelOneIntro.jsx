@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import IntegratedNavigation from '../../IntegratedNavigation.jsx';
 export default function LevelOneIntro() {
   const navigate = useNavigate();
   const selectedCharacter = JSON.parse(localStorage.getItem('selectedCharacter'));
@@ -18,6 +18,7 @@ export default function LevelOneIntro() {
       </p>
       <p>The first task awaits you - find yourself a weapon and armor in the old Armory to prepare for the challenges ahead.</p>
       <button onClick={handleStartAdventure}>Enter the Armory</button>
+      <IntegratedNavigation currentPath={window.location.pathname} />
     </div>
   );
 }
