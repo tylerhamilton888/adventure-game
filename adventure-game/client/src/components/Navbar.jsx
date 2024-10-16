@@ -31,8 +31,8 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                         {/* <li><Link to="/my-character">My Character</Link></li> */}
                         <li><Link to="/level-selection">New Adventure</Link></li>
                         <li><Link to="/combat-explanation">Combat Explanation</Link></li>
-                        <li><Link to="/saved-games">My Saved Games</Link></li>
-                        <li><button onClick={() => saveGameHandler()}>Save Progress</button></li>
+                        {/* <li><Link to="/saved-games">My Saved Games</Link></li>
+                        <li><button onClick={() => saveGameHandler()}>Save Progress</button></li> */}
                     </>
                 ) : (
                     <>

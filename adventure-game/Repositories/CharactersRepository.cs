@@ -154,6 +154,27 @@ namespace adventure_game.Repositories
             }
         }
 
+        public void DeleteCharacter(int characterId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    // First, delete related inventory items
+                    cmd.CommandText = "DELETE FROM InventoryItems WHERE characterId = @characterId";
+                    cmd.Parameters.AddWithValue("@characterId", characterId);
+                    cmd.ExecuteNonQuery();
+
+                    // Now, delete the character itself
+                    cmd.CommandText = "DELETE FROM Characters WHERE id = @characterId";
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@characterId", characterId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         // Get a character by ID
         public Character GetCharacterById(int characterId)
         {

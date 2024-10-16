@@ -67,3 +67,19 @@ export const getCharacterDetails = (characterId) => {
     })
     .catch(err => console.error("Failed to fetch character:", err));
 };
+
+
+export const deleteCharacter = (characterId) => {
+  return fetch(`${apiUrl}/api/characters/${characterId}`, {
+    method: "DELETE",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to delete character.");
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Error deleting character:", error);
+    });
+};

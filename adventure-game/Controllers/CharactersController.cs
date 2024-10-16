@@ -52,6 +52,25 @@ namespace adventure_game.Controllers
             return Ok(characters);
         }
 
+        // DELETE: api/characters/{characterId}
+        [HttpDelete("{characterId}")]
+        public IActionResult DeleteCharacter(int characterId)
+        {
+            var character = _charactersRepository.GetCharacterById(characterId);
+            if (character == null)
+            {
+                return NotFound(new { message = "Character not found." });
+            }
+
+            if (character.IsDefault)
+            {
+                return BadRequest(new { message = "Cannot delete a default character." });
+            }
+
+            _charactersRepository.DeleteCharacter(characterId);
+            return Ok(new { message = "Character deleted successfully." });
+        }
+
         // GET: api/characters/{characterId}
         [HttpGet("{characterId}")]
         public IActionResult GetCharacterById(int characterId)

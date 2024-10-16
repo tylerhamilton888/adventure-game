@@ -1,19 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { getGenericCharacters, getCharactersByUserId } from '../managers/CharacterManager';
+import { getGenericCharacters, getCharactersByUserId, deleteCharacter } from '../managers/CharacterManager';
 
-export default function CharacterSelector({ userId }) {
+export default function CharacterSelector() {
   const [characters, setCharacters] = useState([]); 
   const [selectedCharacter, setSelectedCharacter] = useState(null);
+
+  // Get logged-in user's ID from localStorage
+  const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+  const loggedInUserId = userProfile?.id;
 
   // Fetch both generic and user-specific characters
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
         const genericCharacters = await getGenericCharacters(); // Fetch default characters
+        
         let userCharacters = [];
         
-        if (userId) {
-          userCharacters = await getCharactersByUserId(userId); // Fetch user-specific characters
+        if (loggedInUserId) {
+          userCharacters = await getCharactersByUserId(loggedInUserId); // Fetch user-specific characters
+          
         }
 
         // Combine both arrays into one list
@@ -24,7 +30,7 @@ export default function CharacterSelector({ userId }) {
     };
 
     fetchCharacters();
-  }, [userId]);
+  }, [loggedInUserId]);
 
   const handleCharacterSelect = (character) => {
     setSelectedCharacter(character); // Set the selected character for further action
@@ -34,10 +40,24 @@ export default function CharacterSelector({ userId }) {
     if (selectedCharacter) {
       // Store the selected character in localStorage
       localStorage.setItem('selectedCharacter', JSON.stringify(selectedCharacter));
-      console.log('Character stored in localStorage:', selectedCharacter);
+      
       alert(`Character Selected: ${selectedCharacter.name}`);
     } else {
       alert('No character selected.');
+    }
+  };
+
+  const handleDeleteCharacter = async (characterId) => {
+    if (window.confirm('Are you sure you want to delete this character? This action cannot be undone.')) {
+      try {
+        await deleteCharacter(characterId);
+        // Update the character list after deletion
+        setCharacters((prevCharacters) => prevCharacters.filter((char) => char.id !== characterId));
+        alert('Character deleted successfully.');
+      } catch (error) {
+        console.error('Failed to delete character:', error);
+        alert('Failed to delete character.');
+      }
     }
   };
 
@@ -50,10 +70,18 @@ export default function CharacterSelector({ userId }) {
       <h2>Select Your Character</h2>
       <ul>
         {characters.map((character) => (
-          <li key={character.id}>
-            <button onClick={() => handleCharacterSelect(character)}>
+          <li key={character.id} style={{ marginBottom: '10px' }}>
+            <button onClick={() => handleCharacterSelect(character)} style={{ marginRight: '10px' }}>
               {character.name} ({character.className}) - {character.originName}
             </button>
+            {/* Display the userId if available for debugging purposes */}
+            
+            {/* Show delete button only for characters that are not generic (IDs 1, 2, 3) */}
+            {character.id > 3 && (
+              <button onClick={() => handleDeleteCharacter(character.id)} style={{ backgroundColor: 'red', color: 'white' }}>
+                Delete
+              </button>
+            )}
           </li>
         ))}
       </ul>
