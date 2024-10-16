@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getInventoryForCharacter, equipItem, unequipItem } from './managers/InventoryManager';
+import IntegratedNavigation from '../components/IntegratedNavigation';
 
 export default function Inventory() {
   const [inventoryItems, setInventoryItems] = useState([]);
@@ -103,6 +104,8 @@ export default function Inventory() {
           <p><strong>Hands:</strong> {selectedItem.isTwoHanded ? 'Two-Handed' : 'One-Handed'}</p>
         </div>
       )}
+
+      <IntegratedNavigation currentPath={window.location.pathname} showReturnButton={true} />
     </div>
   );
 }

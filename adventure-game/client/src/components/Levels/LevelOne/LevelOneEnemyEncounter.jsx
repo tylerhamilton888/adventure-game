@@ -1,22 +1,24 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useCombatSystem } from '../../UseCombatSystem';
+import IntegratedNavigation from '../../IntegratedNavigation.jsx';
 
 const ENEMIES = {
   forest: {
     name: 'Orc Marauder',
-    health: 80,
-    strength: 12,
+    health: 15,
+    strength: 10,
     dexterity: 8,
-    toughness: 10,
-    weaponSkill: 10,
+    toughness: 5,
+    weaponSkill: 5,
   },
   clearing: {
     name: 'Bandit Leader',
-    health: 100,
-    strength: 14,
-    dexterity: 12,
-    toughness: 12,
-    weaponSkill: 14,
+    health: 10,
+    strength: 5,
+    dexterity: 10,
+    toughness: 8,
+    weaponSkill: 6,
   },
 };
 
@@ -29,9 +31,34 @@ export default function LevelOneEnemyEncounter() {
     return <div>Error: Enemy not found. Please return to the previous path.</div>;
   }
 
+  const selectedCharacter = JSON.parse(localStorage.getItem('selectedCharacter'));
+
+  const player = {
+    ...selectedCharacter,
+    hasShield: selectedCharacter.hasShield || false,
+    isDefensive: false,
+  };
+
+  const { player: currentPlayer, enemy: currentEnemy, combatMessage, playerAttack, combatEnded } = useCombatSystem(
+    player,
+    enemyData
+  );
+
+  const handleAttack = (aggressive) => {
+    playerAttack(aggressive);
+  };
+
   const handleWin = () => {
     alert(`You defeated the ${enemyData.name}!`);
     navigate('/level-one/crossroads');
+  };
+
+  const handleDeath = () => {
+    if (window.confirm('You have been defeated, but the gods are merciful. Try this adventure again?')) {
+      navigate(`/level-one/intro`);
+    } else {
+      navigate(`/home`);
+    }
   };
 
   return (
@@ -42,13 +69,32 @@ export default function LevelOneEnemyEncounter() {
         It looks ready for a fight.
       </p>
       <ul>
-        <li><strong>Health:</strong> {enemyData.health}</li>
-        <li><strong>Strength:</strong> {enemyData.strength}</li>
-        <li><strong>Dexterity:</strong> {enemyData.dexterity}</li>
-        <li><strong>Toughness:</strong> {enemyData.toughness}</li>
-        <li><strong>Weapon Skill:</strong> {enemyData.weaponSkill}</li>
+        <li><strong>Health:</strong> {currentEnemy.health}</li>
+        <li><strong>Strength:</strong> {currentEnemy.strength}</li>
+        <li><strong>Dexterity:</strong> {currentEnemy.dexterity}</li>
+        <li><strong>Toughness:</strong> {currentEnemy.toughness}</li>
+        <li><strong>Weapon Skill:</strong> {currentEnemy.weaponSkill}</li>
       </ul>
-      <button onClick={handleWin}>Win the Fight</button>
+      <ul>
+        <li><strong>Player Health:</strong> {currentPlayer.health}</li>
+      </ul>
+      {!combatEnded && (
+        <>
+          <button onClick={() => handleAttack(true)}>Aggressive Attack</button>
+          <button onClick={() => handleAttack(false)}>Defensive Attack</button>
+        </>
+      )}
+
+      <p>{combatMessage}</p>
+
+      {combatEnded && currentEnemy.health <= 0 && (
+        <button onClick={handleWin}>Proceed to the Crossroads</button>
+      )}
+      {combatEnded && currentPlayer.health <= 0 && (
+        <button onClick={handleDeath}>Restart Level</button>
+      )}
+
+      <IntegratedNavigation currentPath={window.location.pathname} />
     </div>
   );
 }

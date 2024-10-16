@@ -37,7 +37,7 @@ export default function LevelOneArmory() {
   return (
     <div>
       <h2>The Armory</h2>
-      <p>The armory is filled with old, dust-covered weapons. You spot a sturdy sword and a reliable shield.</p>
+      <p>The armory is filled with old, dust-covered weapons. You spot a sturdy sword and a reliable shield.  Take them, go to your inventory, and equip them!</p>
       <button
         onClick={() => handleCollectItem('sword', 1)}
         disabled={itemsCollected.sword}

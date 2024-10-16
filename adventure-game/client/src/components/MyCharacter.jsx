@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getCharacterDetails } from './managers/CharacterManager';
 import { getInventoryForCharacter } from './managers/InventoryManager';
+import IntegratedNavigation from '../components/IntegratedNavigation';
 
 export default function MyCharacter() {
   const [character, setCharacter] = useState(null);
@@ -60,6 +61,8 @@ export default function MyCharacter() {
       <p><strong>Charisma:</strong> {character.charisma} + {charismaModifier} = {totalStat(character.charisma, charismaModifier)}</p>
       <p><strong>Toughness:</strong> {character.toughness} + {toughnessModifier} = {totalStat(character.toughness, toughnessModifier)}</p>
       <p><strong>Weapon Skill:</strong> {character.weaponSkill}</p>
+
+      <IntegratedNavigation currentPath={window.location.pathname} showReturnButton={true} />
     </div>
   );
 }

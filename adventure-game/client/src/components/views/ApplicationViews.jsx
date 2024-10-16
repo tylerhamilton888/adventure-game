@@ -12,6 +12,7 @@ import LevelOneArmory from '../Levels/LevelOne/LevelOneArmory.jsx';
 import LevelOneEnemyEncounter from '../Levels/LevelOne/LevelOneEnemyEncounter.jsx';
 import LevelOneCrossroads from '../Levels/LevelOne/LevelOneCrossroads.jsx';
 import LevelSelection from '../LevelSelection.jsx';
+import CombatExplanation from '../CombatExplanation.jsx';
 
 export default function ApplicationViews({ isLoggedIn, setIsLoggedIn }) {
   const userProfile = localStorage.getItem('userProfile') ? JSON.parse(localStorage.getItem('userProfile')) : null;
@@ -26,6 +27,7 @@ export default function ApplicationViews({ isLoggedIn, setIsLoggedIn }) {
           <Route path="/select-character" element={<CharacterSelector userId={userId} />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/my-character" element={<MyCharacter />} />
+          <Route path="/combat-explanation" element={<CombatExplanation />} />
           
           {/* Level One Routes */}
           <Route path="/level-one/intro" element={<LevelOneIntro />} />
