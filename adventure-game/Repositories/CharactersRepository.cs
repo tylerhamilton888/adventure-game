@@ -139,7 +139,7 @@ namespace adventure_game.Repositories
                     cmd.CommandText = @"SELECT ISNULL(MAX(Id), 0) + 1 FROM InventoryItems";
                     int inventoryItemId = (int)cmd.ExecuteScalar();
 
-                    // Insert basic leather armor into character inventory
+                    // Insert basic armor into character inventory
                     cmd.CommandText = @"
                         INSERT INTO InventoryItems (Id, characterId, itemId, equipped)
                         VALUES (@inventoryItemId, @characterId, @itemId, 0)";
@@ -147,7 +147,7 @@ namespace adventure_game.Repositories
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@inventoryItemId", inventoryItemId);
                     cmd.Parameters.AddWithValue("@characterId", character.Id);
-                    cmd.Parameters.AddWithValue("@itemId", 3); // Assuming item ID 3 is the basic leather armor
+                    cmd.Parameters.AddWithValue("@itemId", 7); 
 
                     cmd.ExecuteNonQuery();
                 }
