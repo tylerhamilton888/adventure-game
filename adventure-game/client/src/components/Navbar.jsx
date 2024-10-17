@@ -25,7 +25,8 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                     <>
                         <li><button onClick={handleLogout}>Logout</button></li>
                         <li><Link to="/create-character">Create Character</Link></li>
-                        <li><Link to="/select-character">Select Character</Link></li>
+                        <li><Link to="/home">Home</Link></li>
+                        {/* <li><Link to="/select-character">Select Character</Link></li> */}
                         {/* Show Inventory link if a character is selected */}
                         {/* {hasCharacter && <li><Link to="/inventory">Inventory</Link></li>} */}
                         {/* <li><Link to="/my-character">My Character</Link></li> */}
@@ -36,8 +37,8 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                     </>
                 ) : (
                     <>
-                        <li><Link to="/login">Login</Link></li>
-                        <li><Link to="/register">Register</Link></li>
+                        {/* <li><Link to="/login">Login</Link></li>
+                        <li><Link to="/register">Register</Link></li> */}
                     </>
                 )}
             </ul>

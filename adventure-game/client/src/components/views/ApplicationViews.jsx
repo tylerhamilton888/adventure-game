@@ -34,6 +34,7 @@ export default function ApplicationViews({ isLoggedIn, setIsLoggedIn }) {
           <Route path="/my-character" element={<MyCharacter />} />
           <Route path="/combat-explanation" element={<CombatExplanation />} />
           <Route path="/saved-games" element={<MySavedGames userId={userId} />} />
+          <Route path="/home" element={<Home userId={userId} />} />
           
           {/* Level One Routes */}
           <Route path="/level-one/intro" element={<LevelOneIntro />} />

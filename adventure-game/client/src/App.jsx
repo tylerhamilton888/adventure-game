@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import ApplicationViews from './components/views/ApplicationViews.jsx';
 import Navbar from './components/Navbar'; // Import a Navbar component for handling login/logout UI
+import './App.css';
 
 function App() {
   // Manage login state

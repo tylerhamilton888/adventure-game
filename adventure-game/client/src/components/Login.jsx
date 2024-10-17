@@ -23,23 +23,26 @@ export default function Login({ setIsLoggedIn }) {
   };
 
   return (
-    <Form onSubmit={loginSubmit}>
-      <fieldset>
-        <FormGroup>
-          <Label for="email">Email</Label>
-          <Input id="email" type="text" onChange={(e) => setEmail(e.target.value)} />
-        </FormGroup>
-        <FormGroup>
-          <Label for="password">Password</Label>
-          <Input id="password" type="password" onChange={(e) => setPassword(e.target.value)} />
-        </FormGroup>
-        <FormGroup>
-          <Button>Login</Button>
-        </FormGroup>
-        <em>
-          Not registered? <Link to="/register">Register</Link>
-        </em>
-      </fieldset>
-    </Form>
+    <div className="container center">
+      <h1 className="welcome-title">Welcome to the Quest for Glory</h1>
+      <Form onSubmit={loginSubmit} className="box center">
+        <fieldset>
+          <FormGroup>
+            <Label for="email" className="label">Email</Label>
+            <Input id="email" type="text" onChange={(e) => setEmail(e.target.value)} />
+          </FormGroup>
+          <FormGroup>
+            <Label for="password" className="label">Password</Label>
+            <Input id="password" type="password" onChange={(e) => setPassword(e.target.value)} />
+          </FormGroup>
+          <FormGroup>
+            <Button className="button">Login</Button>
+          </FormGroup>
+          <em>
+            Not registered? <Link to="/register">Register</Link>
+          </em>
+        </fieldset>
+      </Form>
+    </div>
   );
 }

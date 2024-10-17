@@ -12,7 +12,8 @@ export default function Home({ userId }) {
 
   return (
     <div>
-      <h1>Welcome to the Game</h1>
+      
+      <h1>Welcome to the Quest For Glory</h1>
       <CharacterSelector userId={userId} onCharacterSelect={handleCharacterSelect} />
 
       {selectedCharacter && (
