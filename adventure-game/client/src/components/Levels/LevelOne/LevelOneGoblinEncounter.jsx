@@ -1,35 +1,20 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useCombatSystem } from '../../UseCombatSystem';
 import IntegratedNavigation from '../../IntegratedNavigation.jsx';
 
-const ENEMIES = {
-  forest: {
-    name: 'Orc Marauder',
-    health: 15,
-    strength: 10,
-    dexterity: 8,
-    toughness: 5,
-    weaponSkill: 5,
-  },
-  clearing: {
-    name: 'Bandit Leader',
-    health: 10,
-    strength: 5,
-    dexterity: 10,
-    toughness: 8,
-    weaponSkill: 6,
-  },
-};
-
-export default function LevelOneEnemyEncounter() {
-  const { enemy } = useParams();
+// Component for encountering the Goblin Scout
+const LevelOneGoblinEncounter = () => {
   const navigate = useNavigate();
-  const enemyData = ENEMIES[enemy];
 
-  if (!enemyData) {
-    return <div>Error: Enemy not found. Please return to the previous path.</div>;
-  }
+  const enemyData = {
+    name: 'Goblin Scout',
+    health: 20,
+    strength: 4,
+    dexterity: 12,
+    toughness: 4,
+    weaponSkill: 3,
+  };
 
   const selectedCharacter = JSON.parse(localStorage.getItem('selectedCharacter'));
 
@@ -50,7 +35,7 @@ export default function LevelOneEnemyEncounter() {
 
   const handleWin = () => {
     alert(`You defeated the ${enemyData.name}!`);
-    navigate('/level-one/axe-discovery');
+    navigate('/level-one/reward-screen');
   };
 
   const handleDeath = () => {
@@ -65,8 +50,8 @@ export default function LevelOneEnemyEncounter() {
     <div>
       <h2>Encounter: {enemyData.name}</h2>
       <p>
-        As you move through the {enemy === 'forest' ? 'dark forest' : 'rocky clearing'}, a {enemyData.name} appears!
-        It looks ready for a fight.
+        As you proceed further into the clearing, a Goblin Scout jumps out of the shadows, brandishing a crude spear.
+        It snarls at you and prepares for an attack.
       </p>
       <ul>
         <li><strong>Health:</strong> {currentEnemy.health}</li>
@@ -88,7 +73,7 @@ export default function LevelOneEnemyEncounter() {
       <p>{combatMessage}</p>
 
       {combatEnded && currentEnemy.health <= 0 && (
-        <button onClick={handleWin}>Proceed on your journey</button>
+        <button onClick={handleWin}>Proceed to the Reward Screen</button>
       )}
       {combatEnded && currentPlayer.health <= 0 && (
         <button onClick={handleDeath}>Restart Level</button>
@@ -97,4 +82,6 @@ export default function LevelOneEnemyEncounter() {
       <IntegratedNavigation currentPath={window.location.pathname} />
     </div>
   );
-}
+};
+
+export default LevelOneGoblinEncounter;

@@ -14,6 +14,10 @@ import LevelOneCrossroads from '../Levels/LevelOne/LevelOneCrossroads.jsx';
 import LevelSelection from '../LevelSelection.jsx';
 import CombatExplanation from '../CombatExplanation.jsx';
 import MySavedGames from '../MySavedGames.jsx';
+import LevelOneAxeDiscovery from '../Levels/LevelOne/LevelOneAxeDiscovery.jsx';
+import LevelOneNewLocation from '../Levels/LevelOne/LevelOneNewLocation.jsx';
+import LevelOneRewardScreen from '../Levels/LevelOne/LevelOneRewardScreen.jsx';
+import LevelOneGoblinEncounter from '../Levels/LevelOne/LevelOneGoblinEncounter.jsx';
 
 export default function ApplicationViews({ isLoggedIn, setIsLoggedIn }) {
   const userProfile = localStorage.getItem('userProfile') ? JSON.parse(localStorage.getItem('userProfile')) : null;
@@ -36,6 +40,10 @@ export default function ApplicationViews({ isLoggedIn, setIsLoggedIn }) {
           <Route path="/level-one/armory" element={<LevelOneArmory />} />
           <Route path="/level-one/encounter/:enemy" element={<LevelOneEnemyEncounter />} />
           <Route path="/level-one/crossroads" element={<LevelOneCrossroads />} />
+          <Route path="/level-one/axe-discovery" element={<LevelOneAxeDiscovery />} />
+          <Route path="/level-one/new-location" element={<LevelOneNewLocation />} />
+          <Route path="/level-one/reward-screen" element={<LevelOneRewardScreen />} />
+          <Route path="level-one/goblin-encounter" element={<LevelOneGoblinEncounter />} />
           
           {/* Level Selection */}
           <Route path="/level-selection" element={<LevelSelection />} />

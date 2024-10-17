@@ -110,32 +110,49 @@ namespace adventure_game.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    // Get the item to be equipped and check if it's one-handed or two-handed
+                    // Get the item to be equipped and check if it's one-handed, two-handed, or armor
                     cmd.CommandText = @"
-                SELECT i.isTwoHanded, ii.characterId
+                SELECT i.isTwoHanded, it.typeName, ii.characterId
                 FROM InventoryItems ii
                 JOIN Items i ON ii.itemId = i.id
+                JOIN ItemType it ON i.type = it.id
                 WHERE ii.id = @inventoryItemId";
 
                     cmd.Parameters.AddWithValue("@inventoryItemId", inventoryItemId);
                     var reader = cmd.ExecuteReader();
 
                     bool isTwoHanded = false;
+                    string itemType = "";
                     int characterId = 0;
 
                     if (reader.Read())
                     {
                         isTwoHanded = reader.GetBoolean(reader.GetOrdinal("isTwoHanded"));
+                        itemType = reader.GetString(reader.GetOrdinal("typeName"));
                         characterId = reader.GetInt32(reader.GetOrdinal("characterId"));
                     }
                     reader.Close();
 
-                    // Check how many hands are currently occupied
+                    // If the item is armor, equip without checking hand count
+                    if (itemType == "Armor")
+                    {
+                        cmd.CommandText = @"
+                    UPDATE InventoryItems
+                    SET equipped = 1
+                    WHERE id = @inventoryItemId";
+
+                        cmd.Parameters.Clear();
+                        cmd.Parameters.AddWithValue("@inventoryItemId", inventoryItemId);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+
+                    // Check how many hands are currently occupied, excluding armor
                     cmd.CommandText = @"
                 SELECT ISNULL(SUM(CASE WHEN i.isTwoHanded = 1 THEN 2 ELSE 1 END), 0) as handCount
                 FROM InventoryItems ii
                 JOIN Items i ON ii.itemId = i.id
-                WHERE ii.characterId = @characterId AND ii.equipped = 1";
+                JOIN ItemType it ON i.type = it.id
+                WHERE ii.characterId = @characterId AND ii.equipped = 1 AND it.typeName != 'Armor'";
 
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@characterId", characterId);
@@ -159,6 +176,8 @@ namespace adventure_game.Repositories
                 }
             }
         }
+
+
 
         public bool UnequipItem(int inventoryItemId)
         {
