@@ -37,8 +37,8 @@ const CombatExplanation = () => {
       <h3>5. Combat Messages</h3>
       <p>During combat, you will receive messages detailing what happened during the last turn, such as:</p>
       <ul className="explanation-list">
-        <li><strong>You attack the enemy:</strong> Displays the damage dealt, including the roll, Strength, and the enemy's Toughness.</li>
-        <li><strong>The enemy attacks you:</strong> Displays the enemy's damage and your Toughness value.</li>
+        <li><strong>You attack the enemy:</strong> Displays the damage dealt.</li>
+        <li><strong>The enemy attacks you:</strong> Displays the enemy's damage to you.</li>
         <li><strong>You block the attack:</strong> If you successfully block, the message will show how much damage you avoided.</li>
       </ul>
 
